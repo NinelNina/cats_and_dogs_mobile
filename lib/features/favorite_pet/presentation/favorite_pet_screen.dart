@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../../common/widgets/start_button.dart';
+import '../../../core/widgets/start_button.dart';
 
 class FavoritePetScreen extends StatefulWidget {
   @override

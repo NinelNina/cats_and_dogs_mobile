@@ -1,4 +1,4 @@
-import 'package:cats_facts/core/domain/models/physical_parameter.dart';
+import 'package:purrfect_paws/core/domain/models/physical_parameter.dart';
 
 class DogBreed
 {

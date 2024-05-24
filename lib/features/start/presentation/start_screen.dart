@@ -1,7 +1,7 @@
-import 'package:cats_facts/features/common/widgets/start_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cats_facts/features/favorite_pet/presentation/favorite_pet_screen.dart';
+
+import '../../../core/widgets/start_button.dart';
 
 class StartScreen extends StatelessWidget {
   @override
