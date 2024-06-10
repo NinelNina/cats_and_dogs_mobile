@@ -10,9 +10,10 @@ abstract class ImageEvent extends Equatable {
 class FetchImage extends ImageEvent {
   final String order;
   final int limit;
+  final int? page;
 
-  const FetchImage(this.order, this.limit);
+  const FetchImage(this.order, this.limit, this.page);
 
   @override
-  List<Object?> get props => [order, limit];
+  List<Object?> get props => [order, limit, page];
 }

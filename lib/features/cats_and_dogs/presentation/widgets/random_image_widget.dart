@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/presentation/bloc/random_image/random_image_bloc.dart';
-import '../../../../core/presentation/bloc/random_image/random_image_event.dart';
-import '../../../../core/presentation/bloc/random_image/random_image_state.dart';
+import '../../../../core/presentation/bloc/random_image/image_bloc.dart';
+import '../../../../core/presentation/bloc/random_image/image_event.dart';
+import '../../../../core/presentation/bloc/random_image/image_state.dart';
 
 class RandomImageWidget extends StatelessWidget {
   final String animalName;
@@ -14,7 +14,7 @@ class RandomImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1));
+    BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1, null));
 
     return Container(
       width: width,
@@ -55,11 +55,11 @@ class RandomImageWidget extends StatelessWidget {
                 return Stack(
                   children: [
                     AspectRatio(
-                      aspectRatio: state.image.width / state.image.height,
+                      aspectRatio: state.images[0].width / state.images[0].height,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          state.image.url,
+                          state.images[0].url,
                           fit: BoxFit.cover,
                           width: double.infinity,
                         ),
@@ -82,7 +82,7 @@ class RandomImageWidget extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.refresh, color: Color(0xFF583E26), size: 30.0),
                             onPressed: () {
-                              BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1));
+                              BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1, null));
                             },
                           ),
                         ],

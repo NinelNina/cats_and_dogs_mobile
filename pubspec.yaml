@@ -30,6 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  shared_preferences: ^2.2.3
   flutter_svg: ^1.1.0
   equatable: ^2.0.3
   flutter_bloc: ^8.0.1
@@ -39,6 +40,7 @@ dependencies:
   dio: ^5.4.3+1
 
 dev_dependencies:
+  flutter_launcher_icons: ^0.13.1
   flutter_test:
     sdk: flutter
 
@@ -48,6 +50,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  image_path: "assets/icon/icon.png"
+  min_sdk_android: 24
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -62,10 +69,16 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+     - assets/
+     - assets/icon/
+     - assets/icon/icon.png
      - assets/images/start_picture.png
      - assets/images/logo.png
      - assets/images/cat.svg
      - assets/images/dog.svg
+     - assets/images/navBar/Cats.svg
+     - assets/images/navBar/Dogs.svg
+     - assets/images/navBar/Breeds.svg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

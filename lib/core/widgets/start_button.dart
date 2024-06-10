@@ -13,14 +13,14 @@ class StartButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return OutlinedButton(
-      style: OutlinedButton.styleFrom(
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
         backgroundColor: Color(0xFFE5B26D),
         minimumSize: Size(width, height),
         side: BorderSide(color: Color(0xFFB05A20), width: 2),
       ),
         onPressed: (path != null ? () {
-          Navigator.pushNamed(context, path!);
+          Navigator.pushReplacementNamed(context, path!);
         } : null),
       child: Text(text,
     style: TextStyle(

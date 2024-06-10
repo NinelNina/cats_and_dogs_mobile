@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/widgets/start_button.dart';
 
 class FavoritePetScreen extends StatefulWidget {
+  const FavoritePetScreen({super.key});
+
   @override
   _FavoritePetScreenState createState() => _FavoritePetScreenState();
 }
@@ -12,13 +15,20 @@ class FavoritePetScreen extends StatefulWidget {
 class _FavoritePetScreenState extends State<FavoritePetScreen> {
   String _selectedPet = '';
 
+  Future<void> _saveSelectedPet() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('selectedPet', _selectedPet);
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
 
-    return SafeArea(
-      child: Scaffold(
+    return PopScope(
+        onPopInvoked: (bool? result) => false,
+    child: SafeArea(
+    child: Scaffold(
         backgroundColor: const Color(0xFFEDD5C0),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +60,8 @@ class _FavoritePetScreenState extends State<FavoritePetScreen> {
                         setState(() {
                           _selectedPet = _selectedPet == 'cats' ? '' : 'cats';
                         });
+                        _saveSelectedPet();
+                        Navigator.popAndPushNamed(context, '/cats');
                       },
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 300),
@@ -66,6 +78,8 @@ class _FavoritePetScreenState extends State<FavoritePetScreen> {
                         setState(() {
                           _selectedPet = _selectedPet == 'dogs' ? '' : 'dogs';
                         });
+                        _saveSelectedPet();
+                        Navigator.popAndPushNamed(context, '/dogs');
                       },
                       child: AnimatedContainer(
                         duration: Duration(milliseconds: 300),
@@ -81,21 +95,10 @@ class _FavoritePetScreenState extends State<FavoritePetScreen> {
               ),
             ),
             SizedBox(height: screenHeight * 0.05),
-            Container(child:
-              Visibility(
-                visible: _selectedPet.isNotEmpty,
-                child: StartButton(
-                    path: '/' + _selectedPet,
-                    width: screenWidth * 0.74,
-                    height: screenHeight * 0.07,
-                    text: 'Continue'),
-              ),
-              height: screenHeight * 0.073,
-            ),
           ],
         ),
       ),
-    );
+    ));
   }
 }
 

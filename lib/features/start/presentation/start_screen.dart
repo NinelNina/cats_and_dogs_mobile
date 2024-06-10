@@ -60,32 +60,6 @@ class StartScreen extends StatelessWidget {
             height: screenHeight * 0.067,),
           SizedBox(height: screenHeight * 0.03),
           StartButton(path: '/choose_pet', width: screenWidth * 0.74, height: screenHeight * 0.07, text: 'Get started'),
-          // OutlinedButton(
-          //   style: OutlinedButton.styleFrom(
-          //     backgroundColor: Color(0xFFE5B26D),
-          //     padding: EdgeInsets.symmetric(
-          //       horizontal: screenWidth * 0.1,
-          //       vertical: screenHeight * 0.02,
-          //     ),
-          //     minimumSize: Size(screenWidth * 0.74, screenHeight * 0.07),
-          //     side: BorderSide(color: Color(0xFFB05A20), width: 2),
-          //   ),
-          //   onPressed: () {
-          //     Navigator.push(
-          //       context,
-          //       MaterialPageRoute(builder: (context) => FavoritePetScreen()),
-          //     );
-          //   },
-          //   child: Text(
-          //     'Get started',
-          //     style: TextStyle(
-          //       fontFamily: "Poppins",
-          //       fontWeight: FontWeight.w600,
-          //       fontSize: screenHeight * 0.022,
-          //       color: Color(0xFFB05A20),
-          //     ),
-          //   ),
-          // ),
         ],
       ),
     );

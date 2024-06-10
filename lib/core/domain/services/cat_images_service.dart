@@ -3,23 +3,89 @@ import '../models/image_model.dart';
 import '../../api/api_key.dart';
 
 class ImagesService {
-  static Future<ImageModel> getCatImage(String order, int limit) async {
+  static Future<List<ImageModel>> getCatImages(String order, int limit,
+      int? page) async {
     final response = await Dio().get(
-      'https://api.thecatapi.com/v1/images/search',//?order=RND&limit=10&page=0',
-      queryParameters:  {'api-key': catsKey, 'order': order}
+        'https://api.thecatapi.com/v1/images/search',
+        queryParameters: {
+          'api-key': catsKey,
+          'order': order,
+          'limit': limit,
+          'page': page
+        }
     );
-    final data = response.data[0];
-    ImageModel imageModel = ImageModel(null, id: data['id'], url: data['url'], width: data['width'], height: data['height']);
-    return imageModel;
+    return (response.data as List)
+        .map((data) =>
+        ImageModel(
+          null,
+          id: data['id'],
+          url: data['url'],
+          width: data['width'],
+          height: data['height'],
+        ))
+        .toList();
   }
 
-  static Future<ImageModel> getDogImage(String order, int limit) async {
+
+  static Future<List<ImageModel>> getDogImages(String order, int limit,
+      int? page) async {
     final response = await Dio().get(
-      'https://api.thedogapi.com/v1/images/search',//?order=RND&limit=10&page=0',
-      queryParameters:  {'api-key': dogsKey, 'order': order}
+        'https://api.thedogapi.com/v1/images/search',
+        queryParameters: {
+          'api-key': dogsKey,
+          'order': order,
+          'limit': limit,
+          'page': page
+        }
     );
-    final data = response.data[0];
-    ImageModel imageModel = ImageModel(null, id: data['id'], url: data['url'], width: data['width'], height: data['height']);
-    return imageModel;
+    return (response.data as List)
+        .map((data) =>
+        ImageModel(
+          null,
+          id: data['id'],
+          url: data['url'],
+          width: data['width'],
+          height: data['height'],
+        ))
+        .toList();
   }
 }
+/*  static Future<ImageModel> getRandomCatImage() async {
+    final response = await Dio().get(
+        'https://api.thecatapi.com/v1/images/search',
+        queryParameters:  {
+          'api-key': catsKey,
+          'order': 'RND',
+          'limit': 1
+        }
+    );
+    return response.data[0]
+        .map((data) => ImageModel(
+          null,
+          id: data['id'],
+          url: data['url'],
+          width: data['width'],
+          height: data['height'],
+          ))
+        .toList();
+  }*/
+
+  /*static Future<ImageModel> getRandomDogImage() async {
+    final response = await Dio().get(
+        'https://api.thedogapi.com/v1/images/search',
+        queryParameters:  {
+          'api-key': dogsKey,
+          'order': 'RND',
+          'limit': 1
+        }
+    );
+    return response.data[0]
+        .map((data) => ImageModel(
+      null,
+      id: data['id'],
+      url: data['url'],
+      width: data['width'],
+      height: data['height'],
+    ))
+        .toList();
+  }*/
