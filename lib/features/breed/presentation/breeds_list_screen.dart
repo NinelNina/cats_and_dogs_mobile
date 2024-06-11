@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:purrfect_paws/core/presentation/bloc/breeds_list/breeds_list_bloc.dart';
+import 'package:purrfect_paws/core/presentation/bloc/breeds_list/breeds_list_event.dart';
+import 'package:purrfect_paws/core/presentation/bloc/breeds_list/breeds_list_state.dart';
 import 'package:purrfect_paws/core/widgets/custom_app_bar.dart';
 import 'package:purrfect_paws/features/breed/presentation/widgets/breed_tile.dart';
 
@@ -8,6 +12,26 @@ class BreedsListScreen extends StatefulWidget {
 }
 
 class _BreedsListScreenState extends State<BreedsListScreen> {
+  late BreedBloc _breedBloc;
+  bool isCat = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _initializeBloc();
+  }
+
+  void _initializeBloc() {
+    _breedBloc = BreedBloc(isCat: isCat);
+    _breedBloc.add(LoadBreeds(limit: 10, page: 1));
+  }
+
+  @override
+  void dispose() {
+    _breedBloc.close();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
@@ -24,10 +48,10 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ToggleButtons(
-              isSelected: [true, false],
-              selectedColor: Colors.white,
-              color: Colors.black,
-              fillColor: Color(0xFFD9A772),
+              isSelected: [isCat, !isCat],
+              selectedColor: Color(0xFF392818),
+              color: Color(0xFF392818),
+              fillColor: Color(0xFFE09D3C),
               borderRadius: BorderRadius.circular(30),
               children: <Widget>[
                 Padding(
@@ -39,7 +63,13 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
                   child: Text('Dogs'),
                 ),
               ],
-              onPressed: (int index) {},
+              onPressed: (int index) {
+                setState(() {
+                  isCat = index == 0;
+                  _breedBloc.close();
+                  _initializeBloc();
+                });
+              },
             ),
           ],
         ),
@@ -49,7 +79,7 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
         child: Column(
           children: [
             SizedBox(height: screenHeight * 0.02),
-            Row(
+            /*Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Icon(Icons.arrow_back, color: Colors.grey),
@@ -70,7 +100,7 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05), // Задаем минимальную ширину и высоту кнопок
+                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05),
                         ),
                         child: Text('${index + 1}'),
                         onPressed: () {},
@@ -86,7 +116,7 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05), // Задаем минимальную ширину и высоту кнопок
+                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05),
                         ),
                         child: Text('9'),
                         onPressed: () {},
@@ -101,7 +131,7 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
-                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05), // Задаем минимальную ширину и высоту кнопок
+                          minimumSize: Size(screenWidth * 0.08, screenHeight * 0.05),
                         ),
                         child: Text('10'),
                         onPressed: () {},
@@ -111,56 +141,34 @@ class _BreedsListScreenState extends State<BreedsListScreen> {
                 ),
                 Icon(Icons.arrow_forward, color: Colors.grey),
               ],
-            ),
+            ),*/
             SizedBox(height: screenHeight * 0.02),
             Expanded(
-              child: ListView(
-                children: [
-                  BreedTile('Abyssinian', 'assets/abyssinian.png'),
-                  BreedTile('Aegean', 'assets/aegean.png'),
-                  BreedTile('American Bobtail', 'assets/american_bobtail.png'),
-                  BreedTile('American Curl', 'assets/american_curl.png'),
-                  BreedTile('American Shorthair', 'assets/american_shorthair.png'),
-                ],
+              child: BlocBuilder<BreedBloc, BreedState>(
+                bloc: _breedBloc,
+                builder: (context, state) {
+                  if (state is BreedLoading) {
+                    return Center(child: CircularProgressIndicator());
+                  } else if (state is BreedLoaded) {
+                    return ListView.builder(
+                      itemCount: state.breeds.length,
+                      itemBuilder: (context, index) {
+                        final breed = state.breeds[index];
+                        return BreedTile(breed.name, breed.image!.url);
+                      },
+                    );
+                  } else if (state is BreedError) {
+                    return Center(child: Text(state.message));
+                  } else {
+                    return Container();
+                  }
+                },
               ),
             ),
           ],
         ),
       ),
       bottomNavigationBar: CustomAppBar(),
-    );
-  }
-}
-
-class BreedTile extends StatelessWidget {
-  final String breedName;
-  final String imagePath;
-
-  BreedTile(this.breedName, this.imagePath);
-
-  @override
-  Widget build(BuildContext context) {
-    final screenWidth = MediaQuery.of(context).size.width;
-
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: screenWidth * 0.02),
-      child: ListTile( //TODO: заменить на BreedTile
-        leading: CircleAvatar(
-          backgroundImage: AssetImage(imagePath),
-          radius: screenWidth * 0.08,
-        ),
-        title: Text(
-          breedName,
-          style: TextStyle(
-            fontSize: screenWidth * 0.06,
-            color: Color(0xFF4F3824),
-          ),
-        ),
-        tileColor: Colors.white,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Увеличим закругление углов
-        ),
-      ),
     );
   }
 }

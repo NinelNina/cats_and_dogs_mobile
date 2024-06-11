@@ -8,23 +8,25 @@ class BreedTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 8),
+      margin: EdgeInsets.symmetric(vertical: screenWidth * 0.02),
       child: ListTile(
         leading: CircleAvatar(
-          backgroundImage: AssetImage(imagePath),
-          radius: 30,
+          backgroundImage: NetworkImage(imagePath),
+          radius: screenWidth * 0.08,
         ),
         title: Text(
           breedName,
           style: TextStyle(
-            fontSize: 24,
+            fontSize: screenWidth * 0.06,
             color: Color(0xFF4F3824),
           ),
         ),
         tileColor: Colors.white,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+          borderRadius: BorderRadius.circular(20), // Увеличим закругление углов
         ),
       ),
     );
