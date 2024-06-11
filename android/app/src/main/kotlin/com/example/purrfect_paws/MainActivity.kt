@@ -1,4 +1,4 @@
-package com.example.cats_facts
+package com.example.purrfect_paws
 
 import io.flutter.embedding.android.FlutterActivity
 
