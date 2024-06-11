@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/presentation/bloc/random_image/image_bloc.dart';
-import '../../../../core/presentation/bloc/random_image/image_event.dart';
-import '../../../../core/presentation/bloc/random_image/image_state.dart';
+import 'package:purrfect_paws/core/presentation/bloc/random_image/random_image_bloc.dart';
+import 'package:purrfect_paws/core/presentation/bloc/random_image/random_image_event.dart';
+import 'package:purrfect_paws/core/presentation/bloc/random_image/random_image_state.dart';
 
 class RandomImageWidget extends StatelessWidget {
   final String animalName;
@@ -14,8 +14,6 @@ class RandomImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1, null));
-
     return Container(
       width: width,
       padding: EdgeInsets.all(16.0),
@@ -33,33 +31,38 @@ class RandomImageWidget extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Center(child:
-            Text(
-                'Get random cute $animalName photo',
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontFamily: "LexendDeca",
-                  fontWeight: FontWeight.w500,
-                  fontSize: fontSize,
-                  height: 1.25,
-                  color: Color(0xFF583E26),
-                ),
+          Center(
+            child: Text(
+              'Get random cute $animalName photo',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontFamily: "LexendDeca",
+                fontWeight: FontWeight.w500,
+                fontSize: fontSize,
+                height: 1.25,
+                color: Color(0xFF583E26),
+              ),
             ),
           ),
           SizedBox(height: 10.0),
-          BlocBuilder<ImageBloc, ImageState>(
+          BlocBuilder<RandomImageBloc, RandomImageState>(
             builder: (context, state) {
-              if (state is ImageLoading) {
+              if (state is RandomImageLoading) {
+                // Show progress indicator for both image and random image loading
                 return Center(child: CircularProgressIndicator());
-              } else if (state is ImageLoaded) {
+              } else if (state is RandomImageError) {
+                return Center(child: Text(state.message));
+              } else if (state is RandomImageLoaded) {
+                // Handle both loaded states (normal and random)
+                final image = state.image;
                 return Stack(
                   children: [
                     AspectRatio(
-                      aspectRatio: state.images[0].width / state.images[0].height,
+                      aspectRatio: image.width / image.height,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16.0),
                         child: Image.network(
-                          state.images[0].url,
+                          image.url,
                           fit: BoxFit.cover,
                           width: double.infinity,
                         ),
@@ -82,7 +85,7 @@ class RandomImageWidget extends StatelessWidget {
                           IconButton(
                             icon: Icon(Icons.refresh, color: Color(0xFF583E26), size: 30.0),
                             onPressed: () {
-                              BlocProvider.of<ImageBloc>(context).add(FetchImage('RND', 1, null));
+                              BlocProvider.of<RandomImageBloc>(context).add(FetchRandomImage());
                             },
                           ),
                         ],
@@ -90,8 +93,6 @@ class RandomImageWidget extends StatelessWidget {
                     ),
                   ],
                 );
-              } else if (state is ImageError) {
-                return Center(child: Text(state.message));
               } else {
                 return Center(child: Text('Press refresh to load image'));
               }
@@ -102,3 +103,5 @@ class RandomImageWidget extends StatelessWidget {
     );
   }
 }
+
+

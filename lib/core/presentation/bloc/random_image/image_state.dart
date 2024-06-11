@@ -23,21 +23,20 @@ class ImageLoaded extends ImageState {
     this.page,
   });
 
-  ImageLoaded copyWith({
-    List<ImageModel>? images,
-    bool? hasReachedMax,
-    int? page,
-  }) {
-    return ImageLoaded(
-      images: images ?? this.images,
-      hasReachedMax: hasReachedMax ?? this.hasReachedMax,
-      page: page ?? this.page,
-    );
-  }
-
   @override
   List<Object?> get props => [images, hasReachedMax, page];
 }
+
+/*class RandomImageLoading extends ImageState {} // Добавлено состояние для индикации загрузки случайного изображения
+
+class RandomImageLoaded extends ImageState { // Добавлено состояние для случайного изображения
+  final ImageModel image;
+
+  const RandomImageLoaded({required this.image});
+
+  @override
+  List<Object?> get props => [image];
+}*/
 
 class ImageError extends ImageState {
   final String message;

@@ -49,43 +49,30 @@ class ImagesService {
         ))
         .toList();
   }
-}
-/*  static Future<ImageModel> getRandomCatImage() async {
+
+  static Future<ImageModel> getRandomCatImage() async {
     final response = await Dio().get(
         'https://api.thecatapi.com/v1/images/search',
-        queryParameters:  {
+        queryParameters: {
           'api-key': catsKey,
           'order': 'RND',
           'limit': 1
         }
     );
-    return response.data[0]
-        .map((data) => ImageModel(
-          null,
-          id: data['id'],
-          url: data['url'],
-          width: data['width'],
-          height: data['height'],
-          ))
-        .toList();
-  }*/
+    final data = response.data[0];
+    return ImageModel(null, id: data['id'], url: data['url'], width: data['width'], height: data['height']);
+  }
 
-  /*static Future<ImageModel> getRandomDogImage() async {
+  static Future<ImageModel> getRandomDogImage() async {
     final response = await Dio().get(
         'https://api.thedogapi.com/v1/images/search',
-        queryParameters:  {
+        queryParameters: {
           'api-key': dogsKey,
           'order': 'RND',
           'limit': 1
         }
     );
-    return response.data[0]
-        .map((data) => ImageModel(
-      null,
-      id: data['id'],
-      url: data['url'],
-      width: data['width'],
-      height: data['height'],
-    ))
-        .toList();
-  }*/
+    final data = response.data[0];
+    return ImageModel(null, id: data['id'], url: data['url'], width: data['width'], height: data['height']);
+  }
+}

@@ -1,4 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:purrfect_paws/core/presentation/bloc/random_image/random_image_event.dart';
+import 'package:purrfect_paws/core/presentation/bloc/random_image/random_image_state.dart';
 import '../../../domain/models/image_model.dart';
 import '../../../domain/services/cat_images_service.dart';
 import 'image_event.dart';
@@ -24,11 +26,13 @@ class ImageBloc extends Bloc<ImageEvent, ImageState> {
     }
 
     try {
+      emit(ImageLoading()); // Обновлено для индикации загрузки
+
       final newImages = isCat
           ? await ImagesService.getCatImages(event.order, event.limit, nextPage)
           : await ImagesService.getDogImages(event.order, event.limit, nextPage);
 
-      final hasReachedMax = newImages.isEmpty;
+      final hasReachedMax = newImages.length < event.limit;
 
       emit(
         ImageLoaded(
